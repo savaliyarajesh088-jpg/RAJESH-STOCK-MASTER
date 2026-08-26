@@ -1183,7 +1183,7 @@ def analyze(symbol):
         "difference":
             difference,
 
-        "df":daily,
+        "df":d,
     }
 
 
