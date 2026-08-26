@@ -1494,11 +1494,18 @@ for stock in (
             .analysis_cache[stock]
         )
 
-        if result:
+     if result and "error" not in result:
+    results.append(result)
 
-            results.append(
-                result
-            )
+     for stock, result in st.session_state.analysis_cache.items():
+    if result and "error" in result:
+        st.warning(
+            f"⚠️ {stock}: {result['error']}"
+        )
+
+            
+                
+            
 
 
 if not results:
