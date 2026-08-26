@@ -1481,31 +1481,17 @@ if analyze_all:
 
 results = []
 
-for stock in (
-    st.session_state.watchlist
-):
+for stock in st.session_state.watchlist:
 
-    if stock in (
-        st.session_state.analysis_cache
-    ):
+    result = st.session_state.analysis_cache.get(stock)
 
-        result = (
-            st.session_state
-            .analysis_cache[stock]
-        )
+    if result and "error" not in result:
+        results.append(result)
 
-     if result and "error" not in result:
-    results.append(result)
-
-     for stock, result in st.session_state.analysis_cache.items():
-    if result and "error" in result:
+    elif result and "error" in result:
         st.warning(
             f"⚠️ {stock}: {result['error']}"
         )
-
-            
-                
-            
 
 
 if not results:
@@ -1527,6 +1513,7 @@ st.divider()
 st.subheader(
     "🚦 SIGNAL DASHBOARD"
 )
+
 
 summary = []
 
