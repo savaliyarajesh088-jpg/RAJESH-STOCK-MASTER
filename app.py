@@ -1,12 +1,10 @@
 # ============================================================
-# 🐂 RAJESH STOCK ANALYZER PRO V2.8 MASTER
-# ============================================================
+# 🐂 RAJESH STOCK ANALYZER PRO V2.9 MASTER
 # NSE • Manual 1–15 Stocks
-# EMS V3 • PRICE VALUE • D/W/M
-# EMA 10/20/50/100/200 • CPR (Central Pivot Range)
-# RSI 14 • MACD 12/26/9 • Supertrend 10,3
-# Momentum • Breakout + Retest • Volume Confirmation
-# Swing + Long • Risk • Mobile UI
+# EMS V3.1 • PRICE VALUE • D/W/M
+# EMA 10/20/50/100/200 • CPR CENTRAL PIVOT RANGE
+# RSI • MACD • SUPERTREND • MOMENTUM
+# BREAKOUT + RETEST • SWING + LONG • RISK ENGINE
 # ============================================================
 
 import streamlit as st
@@ -20,14 +18,14 @@ from datetime import datetime
 # ============================================================
 
 st.set_page_config(
-    page_title="RAJESH STOCK ANALYZER PRO V2.8",
+    page_title="RAJESH STOCK ANALYZER PRO V2.9",
     page_icon="🐂",
     layout="wide",
     initial_sidebar_state="collapsed"
 )
 
 # ============================================================
-# GLOBAL CSS
+# CSS
 # ============================================================
 
 st.markdown("""
@@ -37,23 +35,20 @@ html, body, [class*="css"] {
     font-family: Arial, sans-serif;
 }
 
-.stApp {
+.main {
     background:#050505;
-    color:#f5f5f5;
 }
 
 .block-container {
-    padding-top:.55rem;
-    padding-left:.55rem;
-    padding-right:.55rem;
-    max-width:1500px;
+    padding-top:.6rem;
+    padding-left:.6rem;
+    padding-right:.6rem;
 }
 
 .app-title {
     font-size:23px;
     font-weight:900;
-    line-height:1.15;
-    margin-bottom:3px;
+    margin-bottom:2px;
 }
 
 .app-subtitle {
@@ -62,17 +57,6 @@ html, body, [class*="css"] {
     margin-bottom:10px;
 }
 
-.section-title {
-    font-size:16px;
-    font-weight:900;
-    margin-top:10px;
-    margin-bottom:6px;
-}
-
-/* ========================================================
-   SAFE GRID
-   ======================================================== */
-
 .box-grid {
     display:grid;
     grid-template-columns:repeat(6,minmax(0,1fr));
@@ -80,44 +64,17 @@ html, body, [class*="css"] {
     margin-bottom:8px;
 }
 
-.key-grid {
-    display:grid;
-    grid-template-columns:repeat(6,minmax(0,1fr));
-    gap:4px;
-    margin-bottom:8px;
-}
-
-.ems-grid {
-    display:grid;
-    grid-template-columns:repeat(5,minmax(0,1fr));
-    gap:4px;
-    margin-bottom:8px;
-}
-
-.target-grid {
-    display:grid;
-    grid-template-columns:repeat(3,minmax(0,1fr));
-    gap:5px;
-    margin-bottom:8px;
-}
-
-/* ========================================================
-   BOX
-   ======================================================== */
-
 .metric-box,
 .key-box,
 .price-box,
 .target-box,
 .ems-box {
-    box-sizing:border-box;
     border:1px solid #303030;
-    border-radius:8px;
+    border-radius:7px;
     background:#101010;
-    padding:7px 4px;
+    padding:6px 4px;
     text-align:center;
     overflow:hidden;
-    min-width:0;
 }
 
 .metric-title,
@@ -128,9 +85,7 @@ html, body, [class*="css"] {
     font-size:9px;
     font-weight:700;
     opacity:.72;
-    white-space:normal;
-    overflow-wrap:anywhere;
-    word-break:normal;
+    white-space:nowrap;
 }
 
 .metric-value,
@@ -140,18 +95,18 @@ html, body, [class*="css"] {
 .ems-value {
     font-size:13px;
     font-weight:900;
-    margin-top:3px;
+    margin-top:2px;
+    white-space:nowrap;
+}
 
-    /* IMPORTANT:
-       Prevent alphabet/number breaking inside boxes */
-    white-space:normal;
-    overflow-wrap:normal;
-    word-break:keep-all;
-    line-height:1.2;
+.key-grid {
+    display:grid;
+    grid-template-columns:repeat(6,minmax(0,1fr));
+    gap:4px;
 }
 
 .key-box {
-    min-height:58px;
+    min-height:54px;
     display:flex;
     flex-direction:column;
     justify-content:center;
@@ -161,35 +116,39 @@ html, body, [class*="css"] {
     font-size:11px;
 }
 
+.target-grid {
+    display:grid;
+    grid-template-columns:repeat(6,minmax(0,1fr));
+    gap:4px;
+}
+
 .target-box {
-    min-height:65px;
-    padding:6px 4px;
+    min-height:54px;
+    padding:5px 3px;
 }
 
 .target-value {
-    font-size:13px;
+    font-size:12px;
 }
 
 .target-upside {
     font-size:9px;
-    opacity:.78;
-    margin-top:2px;
+    opacity:.75;
+}
+
+.ems-grid {
+    display:grid;
+    grid-template-columns:repeat(5,minmax(0,1fr));
+    gap:4px;
 }
 
 .ems-box {
-    min-height:56px;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
+    min-height:52px;
 }
 
 .ems-value {
     font-size:11px;
 }
-
-/* ========================================================
-   BORDERS
-   ======================================================== */
 
 .green-box,
 .key-positive {
@@ -214,107 +173,82 @@ html, body, [class*="css"] {
     border-color:#9a5a12;
 }
 
-/* ========================================================
-   SIGNAL
-   ======================================================== */
-
 .signal {
     font-size:19px;
     font-weight:900;
-    padding:3px 0 5px 0;
+    padding:3px 0;
 }
 
-.small-note {
-    font-size:10px;
-    opacity:.68;
+.section-title {
+    font-size:16px;
+    font-weight:900;
+    margin-top:10px;
+    margin-bottom:5px;
 }
 
-/* ========================================================
-   MOBILE
-   ======================================================== */
+.warning-text {
+    font-size:12px;
+    font-weight:800;
+}
 
 @media(max-width:900px) {
 
     .box-grid {
-        grid-template-columns:repeat(3,minmax(0,1fr));
+        grid-template-columns:repeat(3,1fr);
     }
 
     .key-grid {
-        grid-template-columns:repeat(3,minmax(0,1fr));
+        grid-template-columns:repeat(3,1fr);
+    }
+
+    .target-grid {
+        grid-template-columns:repeat(3,1fr);
     }
 
     .ems-grid {
-        grid-template-columns:repeat(3,minmax(0,1fr));
+        grid-template-columns:repeat(3,1fr);
     }
 }
 
 @media(max-width:500px) {
 
-    .block-container {
-        padding-left:.35rem;
-        padding-right:.35rem;
-    }
-
     .app-title {
         font-size:18px;
     }
 
-    .app-subtitle {
-        font-size:10px;
-    }
-
     .box-grid {
-        grid-template-columns:repeat(2,minmax(0,1fr));
-        gap:4px;
+        grid-template-columns:repeat(2,1fr);
     }
 
     .key-grid {
-        grid-template-columns:repeat(3,minmax(0,1fr));
-        gap:3px;
-    }
-
-    .ems-grid {
-        grid-template-columns:repeat(3,minmax(0,1fr));
+        grid-template-columns:repeat(3,1fr);
         gap:3px;
     }
 
     .target-grid {
-        grid-template-columns:repeat(3,minmax(0,1fr));
+        grid-template-columns:repeat(3,1fr);
         gap:3px;
     }
 
-    .metric-box,
+    .ems-grid {
+        grid-template-columns:repeat(3,1fr);
+        gap:3px;
+    }
+
     .key-box,
-    .price-box,
     .target-box,
     .ems-box {
-        padding:6px 3px;
-        border-radius:7px;
-    }
-
-    .metric-title,
-    .key-title,
-    .price-title,
-    .target-title,
-    .ems-title {
-        font-size:8px;
-    }
-
-    .metric-value {
-        font-size:11px;
+        min-height:50px;
     }
 
     .key-value,
-    .target-value {
+    .target-value,
+    .ems-value {
         font-size:10px;
     }
 
-    .ems-value {
-        font-size:9px;
-    }
-
-    .signal {
-        font-size:16px;
+    .metric-value {
+        font-size:12px;
     }
 }
 
@@ -326,16 +260,15 @@ html, body, [class*="css"] {
 # ============================================================
 
 st.markdown(
-    '<div class="app-title">🐂 RAJESH STOCK ANALYZER PRO V2.8 MASTER</div>',
+    '<div class="app-title">🐂 RAJESH STOCK ANALYZER PRO V2.9 MASTER</div>',
     unsafe_allow_html=True
 )
 
 st.markdown(
     '<div class="app-subtitle">'
-    'NSE • Manual 1–15 Stocks • EMS V3 • PRICE VALUE • '
-    'D/W/M • EMA 10/20/50/100/200 • CPR (Central Pivot Range) • '
-    'RSI • MACD • Supertrend • Momentum • Breakout + Retest • '
-    'Swing + Long • Risk'
+    'NSE • Manual 1–15 Stocks • EMS V3.1 • PRICE VALUE • D/W/M • '
+    'EMA 10/20/50/100/200 • CPR Central Pivot Range • RSI • MACD • '
+    'Supertrend • Momentum • Breakout + Retest • Swing + Long • Risk'
     '</div>',
     unsafe_allow_html=True
 )
@@ -345,24 +278,17 @@ st.markdown(
 # ============================================================
 
 def safe_num(value, default=0.0):
-
     try:
-
         if value is None:
             return default
-
         if pd.isna(value):
             return default
-
         return float(value)
-
     except Exception:
-
         return default
 
 
 def html_box(title, value, css=""):
-
     return f"""
     <div class="key-box {css}">
         <div class="key-title">{title}</div>
@@ -372,7 +298,6 @@ def html_box(title, value, css=""):
 
 
 def price_box(title, value, css=""):
-
     return f"""
     <div class="price-box {css}">
         <div class="price-title">{title}</div>
@@ -382,7 +307,6 @@ def price_box(title, value, css=""):
 
 
 def target_box(title, price, upside):
-
     return f"""
     <div class="target-box">
         <div class="target-title">{title}</div>
@@ -393,7 +317,6 @@ def target_box(title, price, upside):
 
 
 def ems_box(title, value, css=""):
-
     return f"""
     <div class="ems-box {css}">
         <div class="ems-title">{title}</div>
@@ -414,10 +337,10 @@ def calculate_indicators(df):
     low = df["Low"]
 
     # --------------------------------------------------------
-    # EMA MASTER
+    # EMA
     # --------------------------------------------------------
 
-    for p in [10,20,50,100,200]:
+    for p in [10, 20, 50, 100, 200]:
 
         df[f"EMA{p}"] = close.ewm(
             span=p,
@@ -443,17 +366,14 @@ def calculate_indicators(df):
         adjust=False
     ).mean()
 
-    rs = avg_gain / avg_loss.replace(
-        0,
-        np.nan
-    )
+    rs = avg_gain / avg_loss.replace(0, np.nan)
 
     df["RSI14"] = 100 - (
         100 / (1 + rs)
     )
 
     # --------------------------------------------------------
-    # MACD 12 / 26 / 9
+    # MACD
     # --------------------------------------------------------
 
     ema12 = close.ewm(
@@ -490,14 +410,11 @@ def calculate_indicators(df):
 
     df["VOLUME_RATIO"] = (
         df["Volume"] /
-        df["VOLUME_AVG20"].replace(
-            0,
-            np.nan
-        )
+        df["VOLUME_AVG20"].replace(0, np.nan)
     )
 
     # --------------------------------------------------------
-    # 52 WEEK HIGH / LOW
+    # 52 WEEK
     # --------------------------------------------------------
 
     df["52W_HIGH"] = (
@@ -509,11 +426,7 @@ def calculate_indicators(df):
     )
 
     # --------------------------------------------------------
-    # CPR = CENTRAL PIVOT RANGE
-    #
-    # PP = Pivot Point
-    # BC = Bottom Central
-    # TC = Top Central
+    # CPR — CENTRAL PIVOT RANGE
     # --------------------------------------------------------
 
     prev_high = high.shift(1)
@@ -537,21 +450,20 @@ def calculate_indicators(df):
     )
 
     df["CPR_LOW"] = df[
-        ["BC","TC"]
+        ["BC", "TC"]
     ].min(axis=1)
 
     df["CPR_HIGH"] = df[
-        ["BC","TC"]
+        ["BC", "TC"]
     ].max(axis=1)
 
     df["CPR_WIDTH"] = (
-        (
-            df["CPR_HIGH"] -
-            df["CPR_LOW"]
-        )
+        (df["CPR_HIGH"] -
+         df["CPR_LOW"])
         /
-        df["PP"].replace(0,np.nan)
-    ) * 100
+        df["PP"].replace(0, np.nan)
+        * 100
+    )
 
     # --------------------------------------------------------
     # SUPPORT / RESISTANCE
@@ -566,14 +478,13 @@ def calculate_indicators(df):
     )
 
     # --------------------------------------------------------
-    # SUPERTREND 10 / 3
+    # SUPERTREND 10,3
     # --------------------------------------------------------
 
     period = 10
     multiplier = 3.0
 
     tr1 = high - low
-
     tr2 = (
         high -
         close.shift()
@@ -585,18 +496,13 @@ def calculate_indicators(df):
     ).abs()
 
     tr = pd.concat(
-        [tr1,tr2,tr3],
+        [tr1, tr2, tr3],
         axis=1
     ).max(axis=1)
 
-    atr = tr.rolling(
-        period
-    ).mean()
+    atr = tr.rolling(period).mean()
 
-    hl2 = (
-        high +
-        low
-    ) / 2
+    hl2 = (high + low) / 2
 
     upper = (
         hl2 +
@@ -621,26 +527,20 @@ def calculate_indicators(df):
     trend.iloc[0] = 1
     st_line.iloc[0] = lower.iloc[0]
 
-    for i in range(1,len(df)):
+    for i in range(1, len(df)):
 
         if close.iloc[i] > upper.iloc[i-1]:
-
             trend.iloc[i] = 1
 
         elif close.iloc[i] < lower.iloc[i-1]:
-
             trend.iloc[i] = -1
 
         else:
-
             trend.iloc[i] = trend.iloc[i-1]
 
         if trend.iloc[i] == 1:
-
             st_line.iloc[i] = lower.iloc[i]
-
         else:
-
             st_line.iloc[i] = upper.iloc[i]
 
     df["SUPERTREND_LINE"] = st_line
@@ -657,7 +557,7 @@ def calculate_indicators(df):
     return df
 
 # ============================================================
-# TIMEFRAME SCORE
+# D / W / M
 # ============================================================
 
 def timeframe_score(df):
@@ -665,79 +565,58 @@ def timeframe_score(df):
     def one_score(data):
 
         if len(data) < 60:
-
             return 50
 
         last = data.iloc[-1]
 
-        c = safe_num(
-            last["Close"]
-        )
+        c = safe_num(last["Close"])
+        e20 = safe_num(last["EMA20"])
+        e50 = safe_num(last["EMA50"])
 
-        e20 = safe_num(
-            last["EMA20"]
-        )
+        score = 50
 
-        e50 = safe_num(
-            last["EMA50"]
-        )
+        if c > e20:
+            score += 15
+        else:
+            score -= 15
+
+        if e20 > e50:
+            score += 15
+        else:
+            score -= 15
 
         rsi = safe_num(
             last["RSI14"],
             50
         )
 
-        score = 50
-
-        if c > e20:
-
-            score += 15
-
-        else:
-
-            score -= 15
-
-        if e20 > e50:
-
-            score += 15
-
-        else:
-
-            score -= 15
-
         if rsi >= 55:
-
             score += 10
 
         elif rsi < 40:
-
             score -= 10
 
         return max(
             0,
-            min(100,score)
+            min(100, score)
         )
 
     daily = one_score(df)
 
-    weekly = df.resample(
-        "W"
-    ).agg({
-        "Open":"first",
-        "High":"max",
-        "Low":"min",
-        "Close":"last",
-        "Volume":"sum"
+    weekly = df.resample("W").agg({
+        "Open": "first",
+        "High": "max",
+        "Low": "min",
+        "Close": "last",
+        "Volume": "sum"
     }).dropna()
 
-    monthly = df.resample(
-        "ME"
-    ).agg({
-        "Open":"first",
-        "High":"max",
-        "Low":"min",
-        "Close":"last",
-        "Volume":"sum"
+    monthly = df.resample("ME").agg({
+        "Open": "first",
+        "High": "max",
+        "Low": "min",
+        "Close": "last",
+        "Volume": "sum"
     }).dropna()
 
     weekly = calculate_indicators(
@@ -748,13 +627,8 @@ def timeframe_score(df):
         monthly
     )
 
-    weekly_score = one_score(
-        weekly
-    )
-
-    monthly_score = one_score(
-        monthly
-    )
+    weekly_score = one_score(weekly)
+    monthly_score = one_score(monthly)
 
     master = round(
         daily * .40 +
@@ -792,10 +666,6 @@ def breakout_engine(df):
         0
     )
 
-    # --------------------------------------------------------
-    # Breakout level
-    # --------------------------------------------------------
-
     breakout_level = (
         resistance * 1.003
     )
@@ -803,10 +673,6 @@ def breakout_engine(df):
     breakout = (
         close >= breakout_level
     )
-
-    # --------------------------------------------------------
-    # Previous resistance
-    # --------------------------------------------------------
 
     previous_resistance = safe_num(
         df["RESISTANCE20"].iloc[-2]
@@ -825,20 +691,13 @@ def breakout_engine(df):
 
     retest = (
         breakout and
-        retest_zone_low <= close <= retest_zone_high
+        retest_zone_low <= close <=
+        retest_zone_high
     )
-
-    # --------------------------------------------------------
-    # Volume confirmation
-    # --------------------------------------------------------
 
     volume_confirmed = (
         volume >= 2.0
     )
-
-    # --------------------------------------------------------
-    # Confirmation count
-    # --------------------------------------------------------
 
     confirmations = 0
 
@@ -874,16 +733,11 @@ def breakout_engine(df):
     ) == 1:
         confirmations += 1
 
-    # --------------------------------------------------------
-    # Status
-    # --------------------------------------------------------
-
     if (
         breakout and
         volume_confirmed and
         retest
     ):
-
         status = (
             "🚀 BREAKOUT + RETEST CONFIRMED"
         )
@@ -892,43 +746,27 @@ def breakout_engine(df):
         breakout and
         volume_confirmed
     ):
-
         status = (
             "🚀 BREAKOUT CONFIRMED"
         )
 
     elif breakout:
-
         status = (
             "🟡 BREAKOUT / VOLUME PENDING"
         )
 
     else:
-
         status = "🟡 WATCH"
 
     return {
-
         "level": breakout_level,
-
         "breakout": breakout,
-
         "retest": retest,
-
-        "volume_confirmed":
-            volume_confirmed,
-
-        "confirmations":
-            confirmations,
-
-        "status":
-            status,
-
-        "retest_low":
-            retest_zone_low,
-
-        "retest_high":
-            retest_zone_high
+        "volume_confirmed": volume_confirmed,
+        "confirmations": confirmations,
+        "retest_low": retest_zone_low,
+        "retest_high": retest_zone_high,
+        "status": status
     }
 
 # ============================================================
@@ -939,39 +777,20 @@ def technical_engine(df):
 
     last = df.iloc[-1]
 
-    close = safe_num(
-        last["Close"]
-    )
+    close = safe_num(last["Close"])
 
-    e10 = safe_num(
-        last["EMA10"]
-    )
-
-    e20 = safe_num(
-        last["EMA20"]
-    )
-
-    e50 = safe_num(
-        last["EMA50"]
-    )
-
-    e100 = safe_num(
-        last["EMA100"]
-    )
-
-    e200 = safe_num(
-        last["EMA200"]
-    )
+    e10 = safe_num(last["EMA10"])
+    e20 = safe_num(last["EMA20"])
+    e50 = safe_num(last["EMA50"])
+    e100 = safe_num(last["EMA100"])
+    e200 = safe_num(last["EMA200"])
 
     rsi = safe_num(
         last["RSI14"],
         50
     )
 
-    macd = safe_num(
-        last["MACD"]
-    )
-
+    macd = safe_num(last["MACD"])
     macd_signal = safe_num(
         last["MACD_SIGNAL"]
     )
@@ -988,83 +807,244 @@ def technical_engine(df):
 
     score = 0
 
-    # --------------------------------------------------------
-    # EMA = 40%
-    # --------------------------------------------------------
-
-    ema_score = 0
-
+    # EMA 40
     if close > e10:
-        ema_score += 8
+        score += 8
 
     if e10 > e20:
-        ema_score += 8
+        score += 8
 
     if e20 > e50:
-        ema_score += 8
+        score += 8
 
     if e50 > e100:
-        ema_score += 8
+        score += 8
 
     if e100 > e200:
-        ema_score += 8
+        score += 8
 
-    score += ema_score
-
-    # --------------------------------------------------------
-    # RSI = 15%
-    # --------------------------------------------------------
-
-    if rsi >= 60:
-
+    # RSI 15
+    if 55 <= rsi < 70:
         score += 15
 
-    elif rsi >= 50:
-
+    elif 50 <= rsi < 55:
         score += 10
 
-    elif rsi >= 40:
-
+    elif 40 <= rsi < 50:
         score += 5
 
-    # --------------------------------------------------------
-    # MACD = 15%
-    # --------------------------------------------------------
+    elif rsi >= 70:
+        score += 5
 
+    # MACD 15
     if macd > macd_signal:
-
         score += 15
 
-    # --------------------------------------------------------
-    # Supertrend = 15%
-    # --------------------------------------------------------
-
+    # Supertrend 15
     if st == 1:
-
         score += 15
 
-    # --------------------------------------------------------
-    # Volume = 15%
-    # --------------------------------------------------------
-
+    # Volume 15
     if volume >= 2:
-
         score += 15
 
     elif volume >= 1:
-
         score += 8
 
     return max(
         0,
-        min(
-            100,
-            round(score,1)
-        )
+        min(100, round(score, 1))
     )
 
 # ============================================================
-# EMS V3
+# PRICE VALUE ENGINE
+# ============================================================
+
+def price_value_engine(df):
+
+    last = df.iloc[-1]
+
+    cmp = safe_num(
+        last["Close"]
+    )
+
+    e20 = safe_num(
+        last["EMA20"],
+        cmp
+    )
+
+    e50 = safe_num(
+        last["EMA50"],
+        cmp
+    )
+
+    e100 = safe_num(
+        last["EMA100"],
+        cmp
+    )
+
+    e200 = safe_num(
+        last["EMA200"],
+        cmp
+    )
+
+    support = safe_num(
+        last["SUPPORT20"],
+        cmp * .95
+    )
+
+    resistance = safe_num(
+        last["RESISTANCE20"],
+        cmp * 1.05
+    )
+
+    high52 = safe_num(
+        last["52W_HIGH"],
+        resistance
+    )
+
+    low52 = safe_num(
+        last["52W_LOW"],
+        support
+    )
+
+    # Reference value
+    reference = (
+        e20 * .15 +
+        e50 * .20 +
+        e100 * .20 +
+        e200 * .20 +
+        resistance * .15 +
+        high52 * .10
+    )
+
+    # Exit
+    exit_price = min(
+        e50,
+        support * 1.02
+    )
+
+    stop_loss = (
+        support * .97
+    )
+
+    # Buy zone
+    buy_center = (
+        e20 * .40 +
+        e50 * .60
+    )
+
+    buy_low = min(
+        support,
+        buy_center * .97
+    )
+
+    buy_high = max(
+        support,
+        buy_center * 1.01
+    )
+
+    dip_low = min(
+        e50 * .97,
+        support * .99
+    )
+
+    dip_high = max(
+        e50 * 1.01,
+        support * 1.02
+    )
+
+    breakout = (
+        resistance * 1.003
+    )
+
+    # --------------------------------------------------------
+    # ORDERED TARGET ENGINE
+    # --------------------------------------------------------
+
+    swing1 = max(
+        cmp * 1.03,
+        resistance * 1.02
+    )
+
+    swing2 = max(
+        swing1 * 1.05,
+        high52 * .98
+    )
+
+    swing3 = max(
+        swing2 * 1.05,
+        high52 * 1.05
+    )
+
+    long1 = max(
+        swing3,
+        high52 * 1.10,
+        cmp * 1.15
+    )
+
+    long2 = max(
+        long1 * 1.08,
+        high52 * 1.20,
+        cmp * 1.25
+    )
+
+    long3 = max(
+        long2 * 1.08,
+        high52 * 1.35,
+        cmp * 1.40
+    )
+
+    upside = (
+        (reference / cmp) - 1
+    ) * 100
+
+    downside = (
+        (cmp - stop_loss) / cmp
+    ) * 100
+
+    reward = max(
+        0,
+        swing1 - cmp
+    )
+
+    risk = max(
+        0,
+        cmp - stop_loss
+    )
+
+    rr = (
+        reward / risk
+        if risk > 0
+        else 0
+    )
+
+    return {
+        "reference": reference,
+        "exit": exit_price,
+        "stop": stop_loss,
+        "buy_low": buy_low,
+        "buy_high": buy_high,
+        "dip_low": dip_low,
+        "dip_high": dip_high,
+        "breakout": breakout,
+        "support": support,
+        "resistance": resistance,
+        "high52": high52,
+        "low52": low52,
+        "swing1": swing1,
+        "swing2": swing2,
+        "swing3": swing3,
+        "long1": long1,
+        "long2": long2,
+        "long3": long3,
+        "upside": upside,
+        "downside": downside,
+        "rr": rr
+    }
+
+# ============================================================
+# EMS V3.1
 # ============================================================
 
 def ems_engine(df):
@@ -1079,10 +1059,6 @@ def ems_engine(df):
         df
     )
 
-    # --------------------------------------------------------
-    # MOMENTUM
-    # --------------------------------------------------------
-
     rsi = safe_num(
         last["RSI14"],
         50
@@ -1093,35 +1069,39 @@ def ems_engine(df):
         0
     )
 
+    # --------------------------------------------------------
+    # MOMENTUM
+    # --------------------------------------------------------
+
     momentum = 50
 
-    if rsi >= 60:
-
+    if 60 <= rsi < 70:
         momentum += 20
 
-    elif rsi >= 50:
-
+    elif 50 <= rsi < 60:
         momentum += 10
 
-    elif rsi < 40:
+    elif 70 <= rsi < 80:
+        momentum += 10
 
+    elif rsi >= 80:
+        momentum -= 10
+
+    elif rsi < 40:
         momentum -= 20
 
     if roc > 10:
-
         momentum += 20
 
     elif roc > 0:
-
         momentum += 10
 
     else:
-
         momentum -= 10
 
     momentum = max(
         0,
-        min(100,momentum)
+        min(100, momentum)
     )
 
     # --------------------------------------------------------
@@ -1141,16 +1121,14 @@ def ems_engine(df):
     support_score = 50
 
     if close > support:
-
         support_score += 20
 
     if close < resistance:
-
         support_score += 10
 
     support_score = max(
         0,
-        min(100,support_score)
+        min(100, support_score)
     )
 
     # --------------------------------------------------------
@@ -1163,23 +1141,19 @@ def ems_engine(df):
     )
 
     if volume_ratio >= 2:
-
         volume_score = 100
 
     elif volume_ratio >= 1.5:
-
         volume_score = 80
 
     elif volume_ratio >= 1:
-
         volume_score = 60
 
     else:
-
         volume_score = 30
 
     # --------------------------------------------------------
-    # RELATIVE STRENGTH PROXY
+    # RELATIVE
     # --------------------------------------------------------
 
     relative = 50
@@ -1187,22 +1161,20 @@ def ems_engine(df):
     if close > safe_num(
         last["EMA50"]
     ):
-
         relative += 20
 
     if close > safe_num(
         last["EMA200"]
     ):
-
         relative += 20
 
     relative = max(
         0,
-        min(100,relative)
+        min(100, relative)
     )
 
     # --------------------------------------------------------
-    # RISK DETERIORATION
+    # RISK
     # --------------------------------------------------------
 
     risk = 20
@@ -1210,28 +1182,27 @@ def ems_engine(df):
     if close < safe_num(
         last["EMA20"]
     ):
-
         risk += 20
 
     if rsi < 40:
-
         risk += 25
+
+    if rsi >= 80:
+        risk += 15
 
     if safe_num(
         last["MACD"]
     ) < safe_num(
         last["MACD_SIGNAL"]
     ):
-
         risk += 20
 
     if volume_ratio < .7:
-
         risk += 15
 
     risk = max(
         0,
-        min(100,risk)
+        min(100, risk)
     )
 
     # --------------------------------------------------------
@@ -1268,33 +1239,15 @@ def ems_engine(df):
         cpr_score = 60
         cpr_status = "🟡 INSIDE"
 
-    # --------------------------------------------------------
-    # CPR WIDTH
-    # --------------------------------------------------------
+    # CPR width
+    if cpr_width <= .5:
+        cpr_type = "🟢 NARROW"
 
-    if cpr_width <= 0.50:
-
-        cpr_width_status = (
-            "🔥 NARROW"
-        )
-
-    elif cpr_width <= 1.00:
-
-        cpr_width_status = (
-            "🟢 NORMAL"
-        )
-
-    elif cpr_width <= 2.00:
-
-        cpr_width_status = (
-            "🟡 WIDE"
-        )
+    elif cpr_width <= 1.0:
+        cpr_type = "🟡 NORMAL"
 
     else:
-
-        cpr_width_status = (
-            "🔴 VERY WIDE"
-        )
+        cpr_type = "🟠 WIDE"
 
     # --------------------------------------------------------
     # BREAKOUT
@@ -1305,64 +1258,112 @@ def ems_engine(df):
     )
 
     breakout_score = round(
-        breakout["confirmations"]
-        / 7 * 100,
+        breakout["confirmations"] /
+        7 * 100,
         1
     )
+
+    # --------------------------------------------------------
+    # PRICE VALUE
+    # --------------------------------------------------------
+
+    price = price_value_engine(
+        df
+    )
+
+    reference = price["reference"]
+
+    valuation_penalty = 0
+
+    if close > reference * 1.20:
+        valuation_penalty = 20
+
+    elif close > reference * 1.10:
+        valuation_penalty = 10
+
+    elif close > reference * 1.05:
+        valuation_penalty = 5
+
+    valuation_score = max(
+        0,
+        100 - valuation_penalty * 5
+    )
+
+    # --------------------------------------------------------
+    # RSI OVERBOUGHT PENALTY
+    # --------------------------------------------------------
+
+    rsi_penalty = 0
+
+    if rsi >= 80:
+        rsi_penalty = 15
+
+    elif rsi >= 70:
+        rsi_penalty = 8
 
     # --------------------------------------------------------
     # FINAL EMS
     # --------------------------------------------------------
 
     raw = (
-
-        technical * .30 +
-
-        momentum * .15 +
-
+        technical * .28 +
+        momentum * .14 +
         support_score * .10 +
-
         volume_score * .10 +
-
-        relative * .10 +
-
-        cpr_score * .10 +
-
+        relative * .09 +
+        cpr_score * .09 +
         breakout_score * .05 +
+        (100 - risk) * .10 +
+        valuation_score * .05
+    )
 
-        (100-risk) * .10
+    ems = (
+        raw -
+        rsi_penalty
     )
 
     ems = round(
         max(
             0,
-            min(100,raw)
+            min(100, ems)
         ),
         1
     )
 
     # --------------------------------------------------------
-    # DECISION
+    # DECISION ENGINE
     # --------------------------------------------------------
 
     if (
         ems >= 75 and
-        technical >= 70
+        technical >= 70 and
+        rsi < 80 and
+        volume_ratio >= 1
     ):
 
         decision = "🟢 ADD"
 
-    elif ems >= 60:
+    elif (
+        ems >= 65 and
+        technical >= 60
+    ):
 
         decision = "🟢 HOLD"
 
     elif ems >= 45:
 
-        decision = "🟠 REDUCE / WAIT"
+        decision = "🟠 WAIT / REDUCE"
 
     else:
 
         decision = "🔴 EXIT / NO BUY"
+
+    # Extreme overbought protection
+    if (
+        rsi >= 80 and
+        decision == "🟢 ADD"
+    ):
+        decision = "🟠 HOLD / OVERBOUGHT"
 
     return {
 
@@ -1372,294 +1373,33 @@ def ems_engine(df):
 
         "momentum": momentum,
 
-        "support_score":
-            support_score,
+        "support_score": support_score,
 
-        "volume_score":
-            volume_score,
+        "volume_score": volume_score,
 
-        "relative":
-            relative,
+        "relative": relative,
 
-        "risk":
-            risk,
+        "risk": risk,
 
-        "cpr_score":
-            cpr_score,
+        "cpr_score": cpr_score,
 
-        "cpr_status":
-            cpr_status,
+        "cpr_status": cpr_status,
 
-        "cpr_width":
-            cpr_width,
+        "cpr_width": cpr_width,
 
-        "cpr_width_status":
-            cpr_width_status,
+        "cpr_type": cpr_type,
 
-        "breakout_score":
-            breakout_score,
+        "breakout_score": breakout_score,
 
-        "breakout":
-            breakout,
+        "breakout": breakout,
 
-        "decision":
-            decision
-    }
+        "valuation_score": valuation_score,
 
-# ============================================================
-# PRICE VALUE ENGINE
-# ============================================================
+        "valuation_penalty": valuation_penalty,
 
-def price_value_engine(df):
+        "rsi_penalty": rsi_penalty,
 
-    last = df.iloc[-1]
-
-    cmp = safe_num(
-        last["Close"]
-    )
-
-    e20 = safe_num(
-        last["EMA20"],
-        cmp
-    )
-
-    e50 = safe_num(
-        last["EMA50"],
-        cmp
-    )
-
-    e100 = safe_num(
-        last["EMA100"],
-        cmp
-    )
-
-    e200 = safe_num(
-        last["EMA200"],
-        cmp
-    )
-
-    support = safe_num(
-        last["SUPPORT20"],
-        cmp*.95
-    )
-
-    resistance = safe_num(
-        last["RESISTANCE20"],
-        cmp*1.05
-    )
-
-    high52 = safe_num(
-        last["52W_HIGH"],
-        resistance
-    )
-
-    low52 = safe_num(
-        last["52W_LOW"],
-        support
-    )
-
-    # --------------------------------------------------------
-    # Reference Value
-    # --------------------------------------------------------
-
-    reference = (
-
-        e20 * .15 +
-
-        e50 * .20 +
-
-        e100 * .20 +
-
-        e200 * .20 +
-
-        resistance * .15 +
-
-        high52 * .10
-    )
-
-    # --------------------------------------------------------
-    # EXIT
-    # --------------------------------------------------------
-
-    exit_price = min(
-        e50,
-        support * 1.02
-    )
-
-    # --------------------------------------------------------
-    # STOP
-    # --------------------------------------------------------
-
-    stop_loss = support * .97
-
-    # --------------------------------------------------------
-    # BUY ZONE
-    # --------------------------------------------------------
-
-    buy_center = (
-
-        e20 * .40 +
-
-        e50 * .60
-    )
-
-    buy_low = min(
-        support,
-        buy_center * .97
-    )
-
-    buy_high = max(
-        support,
-        buy_center * 1.01
-    )
-
-    # --------------------------------------------------------
-    # DIP ZONE
-    # --------------------------------------------------------
-
-    dip_low = min(
-        e50 * .97,
-        support * .99
-    )
-
-    dip_high = max(
-        e50 * 1.01,
-        support * 1.02
-    )
-
-    # --------------------------------------------------------
-    # BREAKOUT
-    # --------------------------------------------------------
-
-    breakout = resistance * 1.003
-
-    # --------------------------------------------------------
-    # TARGETS
-    # IMPORTANT: ALWAYS ASCENDING
-    # --------------------------------------------------------
-
-    swing1 = max(
-        resistance * 1.03,
-        cmp * 1.03
-    )
-
-    swing2 = max(
-        swing1 * 1.05,
-        resistance * 1.08
-    )
-
-    swing3 = max(
-        swing2 * 1.06,
-        high52 * 1.05
-    )
-
-    long1 = max(
-        swing3 * 1.03,
-        cmp * 1.15
-    )
-
-    long2 = max(
-        long1 * 1.08,
-        cmp * 1.25
-    )
-
-    long3 = max(
-        long2 * 1.10,
-        cmp * 1.40
-    )
-
-    # --------------------------------------------------------
-    # VALUE
-    # --------------------------------------------------------
-
-    upside = (
-        reference / cmp - 1
-    ) * 100
-
-    downside = (
-        (cmp-stop_loss) / cmp
-    ) * 100
-
-    reward = max(
-        0,
-        swing1-cmp
-    )
-
-    risk = max(
-        0,
-        cmp-stop_loss
-    )
-
-    rr = (
-        reward/risk
-        if risk > 0
-        else 0
-    )
-
-    return {
-
-        "reference":
-            reference,
-
-        "exit":
-            exit_price,
-
-        "stop":
-            stop_loss,
-
-        "buy_low":
-            buy_low,
-
-        "buy_high":
-            buy_high,
-
-        "dip_low":
-            dip_low,
-
-        "dip_high":
-            dip_high,
-
-        "breakout":
-            breakout,
-
-        "support":
-            support,
-
-        "resistance":
-            resistance,
-
-        "high52":
-            high52,
-
-        "low52":
-            low52,
-
-        "swing1":
-            swing1,
-
-        "swing2":
-            swing2,
-
-        "swing3":
-            swing3,
-
-        "long1":
-            long1,
-
-        "long2":
-            long2,
-
-        "long3":
-            long3,
-
-        "upside":
-            upside,
-
-        "downside":
-            downside,
-
-        "rr":
-            rr
+        "decision": decision
     }
 
 # ============================================================
@@ -1671,7 +1411,6 @@ def analyze_stock(symbol):
     ticker = symbol.upper().strip()
 
     if not ticker.endswith(".NS"):
-
         ticker += ".NS"
 
     try:
@@ -1684,11 +1423,7 @@ def analyze_stock(symbol):
             progress=False
         )
 
-        if (
-            df is None or
-            df.empty
-        ):
-
+        if df is None or df.empty:
             return None
 
         if isinstance(
@@ -1710,13 +1445,11 @@ def analyze_stock(symbol):
         ]
 
         missing = [
-            x
-            for x in required
+            x for x in required
             if x not in df.columns
         ]
 
         if missing:
-
             return None
 
         df = df.dropna(
@@ -1724,7 +1457,6 @@ def analyze_stock(symbol):
         )
 
         if len(df) < 210:
-
             return None
 
         df = calculate_indicators(
@@ -1739,8 +1471,8 @@ def analyze_stock(symbol):
             df
         )
 
-        d,w,m,master = timeframe_score(
-            df
+        d, w, m, master = (
+            timeframe_score(df)
         )
 
         return {
@@ -1761,24 +1493,17 @@ def analyze_stock(symbol):
         }
 
     except Exception:
-
         return None
 
 # ============================================================
-# SESSION STATE
+# WATCHLIST
 # ============================================================
 
 if "stocks" not in st.session_state:
-
     st.session_state.stocks = []
 
 if "results" not in st.session_state:
-
     st.session_state.results = {}
-
-# ============================================================
-# ADD STOCK
-# ============================================================
 
 st.markdown("### ➕ ADD STOCK")
 
@@ -1787,70 +1512,24 @@ stock_input = st.text_input(
     placeholder="BSE / RATNAVEER / AIIL"
 )
 
-add_col1, add_col2 = st.columns(
-    [3,1]
-)
+if stock_input:
 
-with add_col1:
+    symbol = (
+        stock_input
+        .upper()
+        .replace(".NS", "")
+        .strip()
+    )
 
-    if st.button(
-        "➕ ADD STOCK",
-        use_container_width=True
+    if (
+        symbol
+        and symbol not in st.session_state.stocks
+        and len(st.session_state.stocks) < 15
     ):
 
-        symbol = (
-            stock_input
-            .upper()
-            .replace(".NS","")
-            .strip()
+        st.session_state.stocks.append(
+            symbol
         )
-
-        if not symbol:
-
-            st.warning(
-                "NSE symbol enter કરો."
-            )
-
-        elif symbol in st.session_state.stocks:
-
-            st.warning(
-                f"{symbol} already added."
-            )
-
-        elif len(
-            st.session_state.stocks
-        ) >= 15:
-
-            st.error(
-                "Maximum 15 stocks allowed."
-            )
-
-        else:
-
-            st.session_state.stocks.append(
-                symbol
-            )
-
-            st.success(
-                f"{symbol} added."
-            )
-
-with add_col2:
-
-    if st.button(
-        "🗑️ CLEAR ALL",
-        use_container_width=True
-    ):
-
-        st.session_state.stocks = []
-
-        st.session_state.results = {}
-
-        st.rerun()
-
-# ============================================================
-# WATCHLIST
-# ============================================================
 
 st.markdown(
     f"### 📋 MY STOCKS — "
@@ -1859,81 +1538,57 @@ st.markdown(
 
 if st.session_state.stocks:
 
-    watch_html = " • ".join(
-        [
-            f"<b>{x}</b>"
-            for x in st.session_state.stocks
-        ]
-    )
-
-    st.markdown(
-        watch_html,
-        unsafe_allow_html=True
+    st.write(
+        " • ".join(
+            st.session_state.stocks
+        )
     )
 
 # ============================================================
-# ANALYZE BUTTONS
+# ANALYZE
 # ============================================================
 
-if st.session_state.stocks:
+if st.button(
+    "🔍 ANALYZE ALL",
+    use_container_width=True
+):
 
-    c1,c2 = st.columns(2)
+    st.session_state.results = {}
 
-    with c1:
+    total = len(
+        st.session_state.stocks
+    )
 
-        analyze_clicked = st.button(
-            "🔍 ANALYZE ALL",
-            use_container_width=True
-        )
+    progress = st.progress(0)
 
-    with c2:
-
-        refresh_clicked = st.button(
-            "🔄 REFRESH DATA",
-            use_container_width=True
-        )
-
-    if (
-        analyze_clicked or
-        refresh_clicked
+    for i, symbol in enumerate(
+        st.session_state.stocks
     ):
 
-        st.session_state.results = {}
-
-        progress = st.progress(0)
-
-        total = len(
-            st.session_state.stocks
+        result = analyze_stock(
+            symbol
         )
 
-        for i,symbol in enumerate(
-            st.session_state.stocks
-        ):
+        if result is not None:
 
-            result = analyze_stock(
+            st.session_state.results[
                 symbol
+            ] = result
+
+        else:
+
+            st.error(
+                f"⚠️ {symbol}: "
+                "Market data unavailable"
             )
 
-            if result is not None:
-
-                st.session_state.results[
-                    symbol
-                ] = result
-
-            else:
-
-                st.error(
-                    f"⚠️ {symbol}: "
-                    "Market data unavailable"
-                )
-
-            progress.progress(
-                int(
-                    (i+1) /
-                    max(total,1) *
-                    100
-                )
+        progress.progress(
+            int(
+                (i + 1) /
+                max(total, 1) *
+                100
             )
+        )
 
 # ============================================================
 # DASHBOARD
@@ -1957,19 +1612,15 @@ if st.session_state.results:
         if r["ems"]["ems"] < 45
     )
 
-    avg_ems = np.mean(
-        [
-            r["ems"]["ems"]
-            for r in results.values()
-        ]
-    )
+    avg_ems = np.mean([
+        r["ems"]["ems"]
+        for r in results.values()
+    ])
 
-    avg_tech = np.mean(
-        [
-            r["ems"]["technical"]
-            for r in results.values()
-        ]
-    )
+    avg_tech = np.mean([
+        r["ems"]["technical"]
+        for r in results.values()
+    ])
 
     bull = sum(
         1
@@ -2036,7 +1687,7 @@ if st.session_state.results:
 # STOCK RESULTS
 # ============================================================
 
-for symbol,result in (
+for symbol, result in (
     st.session_state.results.items()
 ):
 
@@ -2048,37 +1699,37 @@ for symbol,result in (
 
     last = df.iloc[-1]
 
-    # --------------------------------------------------------
-    # CMP = LAST AVAILABLE CLOSE
-    # --------------------------------------------------------
-
     cmp = safe_num(
         last["Close"]
+    )
+
+    rsi = safe_num(
+        last["RSI14"],
+        50
+    )
+
+    volume = safe_num(
+        last["VOLUME_RATIO"],
+        0
     )
 
     # --------------------------------------------------------
     # SIGNAL
     # --------------------------------------------------------
 
-    if (
-        ems["ems"] >= 75
-    ):
+    if ems["ems"] >= 75:
 
         regime = "🐂 BULL"
 
         signal = "🚦 BUY / ADD"
 
-    elif (
-        ems["ems"] >= 60
-    ):
+    elif ems["ems"] >= 60:
 
         regime = "🟢 POSITIVE"
 
         signal = "🟢 HOLD"
 
-    elif (
-        ems["ems"] >= 45
-    ):
+    elif ems["ems"] >= 45:
 
         regime = "🟡 NEUTRAL"
 
@@ -2089,6 +1740,10 @@ for symbol,result in (
         regime = "🐻 BEAR"
 
         signal = "🔴 EXIT / NO BUY"
+
+    if rsi >= 80:
+
+        signal = "🟠 OVERBOUGHT / WAIT"
 
     st.markdown("---")
 
@@ -2110,9 +1765,9 @@ for symbol,result in (
         unsafe_allow_html=True
     )
 
-    # ========================================================
+    # --------------------------------------------------------
     # SUMMARY
-    # ========================================================
+    # --------------------------------------------------------
 
     st.markdown(
         "### 🚦 SMART SIGNAL DASHBOARD"
@@ -2145,17 +1800,21 @@ for symbol,result in (
 
         {price_box(
             "RSI",
-            f'{safe_num(last["RSI14"],50):.1f}',
-            "green-box"
-            if safe_num(last["RSI14"],50) >= 50
-            else "red-box"
+            f'{rsi:.1f}',
+            "red-box"
+            if rsi >= 70
+            else (
+                "green-box"
+                if rsi >= 50
+                else "red-box"
+            )
         )}
 
         {price_box(
             "VOLUME",
-            f'{safe_num(last["VOLUME_RATIO"],0):.2f}x',
+            f'{volume:.2f}x',
             "green-box"
-            if safe_num(last["VOLUME_RATIO"],0) >= 1.5
+            if volume >= 1.5
             else "yellow-box"
         )}
 
@@ -2175,9 +1834,9 @@ for symbol,result in (
         unsafe_allow_html=True
     )
 
-    # ========================================================
+    # --------------------------------------------------------
     # KEY INDICATORS
-    # ========================================================
+    # --------------------------------------------------------
 
     st.markdown(
         "### 📊 KEY INDICATORS"
@@ -2215,11 +1874,6 @@ for symbol,result in (
         ) == 1
     )
 
-    volume = safe_num(
-        last["VOLUME_RATIO"],
-        0
-    )
-
     high52 = safe_num(
         last["52W_HIGH"]
     )
@@ -2248,7 +1902,9 @@ for symbol,result in (
         last["TC"]
     )
 
-    breakout = ems["breakout"]
+    cpr_width = safe_num(
+        last["CPR_WIDTH"]
+    )
 
     key_html = f"""
     <div class="key-grid">
@@ -2295,12 +1951,13 @@ for symbol,result in (
 
         {html_box(
             "CPR",
-            f"₹{cpr_low:,.2f} – ₹{cpr_high:,.2f}",
+            f"₹{cpr_low:,.2f} – "
+            f"₹{cpr_high:,.2f}",
             "key-warning"
         )}
 
         {html_box(
-            "PP",
+            "PP / PIVOT",
             f"₹{pp:,.2f}",
             "key-warning"
         )}
@@ -2319,10 +1976,14 @@ for symbol,result in (
 
         {html_box(
             "RSI 14",
-            f'{safe_num(last["RSI14"],50):.1f}',
-            "key-positive"
-            if safe_num(last["RSI14"],50) >= 50
-            else "key-negative"
+            f"{rsi:.1f}",
+            "key-negative"
+            if rsi >= 70
+            else (
+                "key-positive"
+                if rsi >= 50
+                else "key-negative"
+            )
         )}
 
         {html_box(
@@ -2364,11 +2025,15 @@ for symbol,result in (
         )}
 
         {html_box(
-            "BREAKOUT",
-            breakout["status"],
-            "key-positive"
-            if breakout["confirmations"] >= 5
-            else "key-warning"
+            "CPR WIDTH",
+            f"{cpr_width:.2f}%",
+            "key-warning"
+        )}
+
+        {html_box(
+            "CPR TYPE",
+            ems["cpr_type"],
+            "key-warning"
         )}
 
         {html_box(
@@ -2379,18 +2044,6 @@ for symbol,result in (
             else "key-warning"
         )}
 
-        {html_box(
-            "CPR WIDTH",
-            f'{ems["cpr_width"]:.2f}%',
-            "key-warning"
-        )}
-
-        {html_box(
-            "CPR TYPE",
-            ems["cpr_width_status"],
-            "key-warning"
-        )}
-
     </div>
     """
 
@@ -2399,9 +2052,9 @@ for symbol,result in (
         unsafe_allow_html=True
     )
 
-    # ========================================================
+    # --------------------------------------------------------
     # PRICE VALUE
-    # ========================================================
+    # --------------------------------------------------------
 
     st.markdown(
         "### 💰 PRICE VALUE"
@@ -2456,21 +2109,44 @@ for symbol,result in (
         unsafe_allow_html=True
     )
 
-    # ========================================================
-    # CPR DETAIL
-    # ========================================================
+    # --------------------------------------------------------
+    # PRICE VALUE WARNING
+    # --------------------------------------------------------
+
+    if price["upside"] < -10:
+
+        st.warning(
+            "⚠️ PRICE VALUE WARNING: "
+            "CMP reference value કરતાં નોંધપાત્ર ઉપર છે."
+        )
+
+    elif price["upside"] < 0:
+
+        st.info(
+            "🟡 CMP reference value કરતાં ઉપર છે."
+        )
+
+    else:
+
+        st.success(
+            "🟢 Price Value zone supportive."
+        )
+
+    # --------------------------------------------------------
+    # CPR FULL SECTION
+    # --------------------------------------------------------
 
     st.markdown(
         "### 📐 CPR — CENTRAL PIVOT RANGE"
     )
 
-    cpr_detail = f"""
+    cpr_html = f"""
     <div class="box-grid">
 
         {price_box(
             "PP / PIVOT",
             f"₹{pp:,.2f}",
-            "blue-box"
+            "yellow-box"
         )}
 
         {price_box(
@@ -2499,8 +2175,7 @@ for symbol,result in (
 
         {price_box(
             "CPR WIDTH",
-            f'{ems["cpr_width"]:.2f}% '
-            f'{ems["cpr_width_status"]}',
+            f"{cpr_width:.2f}%",
             "yellow-box"
         )}
 
@@ -2508,16 +2183,21 @@ for symbol,result in (
     """
 
     st.markdown(
-        cpr_detail,
+        cpr_html,
         unsafe_allow_html=True
     )
 
-    # ========================================================
-    # EMS BREAKDOWN
-    # ========================================================
+    st.info(
+        f"📐 CPR TYPE: {ems['cpr_type']} • "
+        f"PRICE: {ems['cpr_status']}"
+    )
+
+    # --------------------------------------------------------
+    # EMS
+    # --------------------------------------------------------
 
     st.markdown(
-        "### 🧠 EMS V3 BREAKDOWN"
+        "### 🧠 EMS V3.1 BREAKDOWN"
     )
 
     ems_html = f"""
@@ -2564,6 +2244,11 @@ for symbol,result in (
         )}
 
         {ems_box(
+            "PRICE VALUE",
+            f'{ems["valuation_score"]:.0f}/100'
+        )}
+
+        {ems_box(
             "D/W/M",
             f'{result["dwm"]:.0f}/100'
         )}
@@ -2589,9 +2274,27 @@ for symbol,result in (
         f'Master {result["dwm"]:.0f}'
     )
 
-    # ========================================================
+    # --------------------------------------------------------
+    # RSI RISK
+    # --------------------------------------------------------
+
+    if rsi >= 80:
+
+        st.error(
+            "🔴 RSI EXTREME OVERBOUGHT — "
+            "fresh ADD ટાળો; confirmationની રાહ જુઓ."
+        )
+
+    elif rsi >= 70:
+
+        st.warning(
+            "🟠 RSI OVERBOUGHT — "
+            "price strong છે પરંતુ fresh entryમાં caution."
+        )
+
+    # --------------------------------------------------------
     # PRICE LEVELS
-    # ========================================================
+    # --------------------------------------------------------
 
     st.markdown(
         "### 🎯 PRICE LEVELS"
@@ -2644,22 +2347,31 @@ for symbol,result in (
         unsafe_allow_html=True
     )
 
-    # ========================================================
+    # --------------------------------------------------------
     # ENTRY + RISK
-    # ========================================================
+    # --------------------------------------------------------
 
     st.markdown(
         "### 🛡️ ENTRY + RISK"
     )
 
-    if ems["ems"] < 45:
+    if (
+        ems["ems"] < 45
+        or rsi >= 80
+    ):
+
+        status = (
+            "🚫 NO FRESH BUY"
+            if ems["ems"] < 45
+            else "⚠️ WAIT — OVERBOUGHT"
+        )
 
         entry = f"""
         <div class="box-grid">
 
             {price_box(
                 "STATUS",
-                "🚫 NO BUY",
+                status,
                 "red-box"
             )}
 
@@ -2723,9 +2435,9 @@ for symbol,result in (
         unsafe_allow_html=True
     )
 
-    # ========================================================
+    # --------------------------------------------------------
     # SWING TARGETS
-    # ========================================================
+    # --------------------------------------------------------
 
     st.markdown(
         "### 🎯 SWING TARGETS"
@@ -2737,19 +2449,19 @@ for symbol,result in (
         {target_box(
             "SWING T1",
             price["swing1"],
-            (price["swing1"]/cmp-1)*100
+            (price["swing1"] / cmp - 1) * 100
         )}
 
         {target_box(
             "SWING T2",
             price["swing2"],
-            (price["swing2"]/cmp-1)*100
+            (price["swing2"] / cmp - 1) * 100
         )}
 
         {target_box(
             "SWING T3",
             price["swing3"],
-            (price["swing3"]/cmp-1)*100
+            (price["swing3"] / cmp - 1) * 100
         )}
 
     </div>
@@ -2760,9 +2472,9 @@ for symbol,result in (
         unsafe_allow_html=True
     )
 
-    # ========================================================
+    # --------------------------------------------------------
     # LONG TARGETS
-    # ========================================================
+    # --------------------------------------------------------
 
     st.markdown(
         "### 🏆 LONG-TERM TARGETS"
@@ -2774,19 +2486,19 @@ for symbol,result in (
         {target_box(
             "LONG T1",
             price["long1"],
-            (price["long1"]/cmp-1)*100
+            (price["long1"] / cmp - 1) * 100
         )}
 
         {target_box(
             "LONG T2",
             price["long2"],
-            (price["long2"]/cmp-1)*100
+            (price["long2"] / cmp - 1) * 100
         )}
 
         {target_box(
             "LONG T3",
             price["long3"],
-            (price["long3"]/cmp-1)*100
+            (price["long3"] / cmp - 1) * 100
         )}
 
     </div>
@@ -2797,9 +2509,9 @@ for symbol,result in (
         unsafe_allow_html=True
     )
 
-    # ========================================================
+    # --------------------------------------------------------
     # BREAKOUT + RETEST
-    # ========================================================
+    # --------------------------------------------------------
 
     st.markdown(
         "### 🚀 BREAKOUT + RETEST"
@@ -2848,7 +2560,7 @@ for symbol,result in (
             "RETEST ZONE",
             f'₹{br["retest_low"]:,.2f} – '
             f'₹{br["retest_high"]:,.2f}',
-            "blue-box"
+            "yellow-box"
         )}
 
         {price_box(
@@ -2867,9 +2579,60 @@ for symbol,result in (
         unsafe_allow_html=True
     )
 
-    # ========================================================
+    # --------------------------------------------------------
+    # D/W/M DETAILS
+    # --------------------------------------------------------
+
+    st.markdown(
+        "### 📅 D / W / M TREND"
+    )
+
+    dwm_html = f"""
+    <div class="box-grid">
+
+        {price_box(
+            "DAILY",
+            f'{result["daily"]:.0f}/100',
+            "green-box"
+            if result["daily"] >= 65
+            else "yellow-box"
+        )}
+
+        {price_box(
+            "WEEKLY",
+            f'{result["weekly"]:.0f}/100',
+            "green-box"
+            if result["weekly"] >= 65
+            else "yellow-box"
+        )}
+
+        {price_box(
+            "MONTHLY",
+            f'{result["monthly"]:.0f}/100',
+            "green-box"
+            if result["monthly"] >= 65
+            else "yellow-box"
+        )}
+
+        {price_box(
+            "MASTER",
+            f'{result["dwm"]:.0f}/100',
+            "green-box"
+            if result["dwm"] >= 65
+            else "yellow-box"
+        )}
+
+    </div>
+    """
+
+    st.markdown(
+        dwm_html,
+        unsafe_allow_html=True
+    )
+
+    # --------------------------------------------------------
     # CHART
-    # ========================================================
+    # --------------------------------------------------------
 
     st.markdown(
         "### 📈 PRICE + EMA 10/20/50/100/200"
@@ -2891,9 +2654,9 @@ for symbol,result in (
         use_container_width=True
     )
 
-    # ========================================================
+    # --------------------------------------------------------
     # WHY SIGNAL
-    # ========================================================
+    # --------------------------------------------------------
 
     st.markdown(
         "### 🧠 WHY THIS SIGNAL?"
@@ -2933,33 +2696,28 @@ for symbol,result in (
             "🟡 EMA structure mixed"
         )
 
-    rsi_value = safe_num(
-        last["RSI14"],
-        50
-    )
-
-    if rsi_value >= 60:
+    if rsi >= 80:
 
         st.write(
-            "🟢 RSI strong"
+            "🔴 RSI extreme overbought"
         )
 
-    elif rsi_value >= 50:
+    elif rsi >= 70:
+
+        st.write(
+            "🟠 RSI overbought"
+        )
+
+    elif rsi >= 50:
 
         st.write(
             "🟢 RSI positive"
         )
 
-    elif rsi_value >= 40:
-
-        st.write(
-            "🟡 RSI weak"
-        )
-
     else:
 
         st.write(
-            "🔴 RSI bearish"
+            "🔴 RSI weak"
         )
 
     if macd_bull:
@@ -3004,32 +2762,49 @@ for symbol,result in (
             "🔴 Volume weak"
         )
 
-    if ems["cpr_width"] <= .50:
+    if cpr_width <= .5:
 
         st.write(
-            "🔥 Narrow CPR — breakout setup may become important"
+            "🟢 Narrow CPR — breakout setup can be important"
         )
 
-    elif ems["cpr_width"] <= 1:
+    elif cpr_width <= 1:
 
         st.write(
-            "🟢 Normal CPR width"
+            "🟡 Normal CPR"
         )
 
     else:
 
         st.write(
-            "🟡 Wide CPR — range is relatively broad"
+            "🟠 Wide CPR — range is relatively broad"
         )
 
-    # ========================================================
+    if price["upside"] < -10:
+
+        st.write(
+            "🔴 Price Value: CMP significantly above reference value"
+        )
+
+    elif price["upside"] < 0:
+
+        st.write(
+            "🟡 Price Value: CMP above reference value"
+        )
+
+    else:
+
+        st.write(
+            "🟢 Price Value supportive"
+        )
+
+    # --------------------------------------------------------
     # FOOTER
-    # ========================================================
+    # --------------------------------------------------------
 
     st.caption(
-        "🐂 RAJESH STOCK ANALYZER PRO V2.8 MASTER • "
-        "NSE Manual Analyzer • EMS V3 • "
+        "🐂 RAJESH STOCK ANALYZER PRO V2.9 MASTER • "
+        "NSE Manual Analyzer • EMS V3.1 • "
         "CPR = Central Pivot Range • "
-        "Research & decision-support tool • "
-        "Not financial advice."
+        "Research & decision-support tool • Not financial advice."
     )
